@@ -39,21 +39,6 @@ export function TextInputPanel() {
           {/* Bottom info */}
 
           <div className="flex items-center justify-between">
-            <Badge variant="outline" className="gap-1.5 border-dashed">
-              <Coins className="size-3 text-chart-5" />
-              <span className="text-xs">
-                {text.length === 0 ? (
-                  "Start typing to estimate"
-                ) : (
-                  <>
-                    <span className="tabular-nums">
-                      ${(text.length * 0.0003).toFixed(4)}
-                    </span>{" "}
-                    estimated
-                  </>
-                )}
-              </span>
-            </Badge>
             <span className="text-xs text-muted-foreground">
               {text.length.toLocaleString()} / {TEXT_MAX_LENGTH.toLocaleString()} characters
             </span>
