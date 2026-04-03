@@ -24,14 +24,14 @@ export function PageHeader({
         <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
       </div>
       <div className="flex items-center gap-3">
-         <Button variant="outline" size="sm" asChild>
-            <Link href="mailto:business@codewithantonio.com">
-              <ThumbsUp />
-              <span className="hidden lg:block">Feedback</span>
-            </Link>
-         </Button>
-         <Button variant="outline" size="sm" asChild>
-          <Link href="mailto:business@codewithantonio.com">
+        <Button variant="outline" size="sm" asChild>
+          <Link href="mailto:imt_2023007+feedback@iiitm.ac.in">
+            <ThumbsUp />
+            <span className="hidden lg:block">Feedback</span>
+          </Link>
+        </Button>
+        <Button variant="outline" size="sm" asChild>
+          <Link href="mailto:mailto:imt_2023007+help@iiitm.ac.in">
             <Headphones />
             <span className="hidden lg:block">Need help?</span>
           </Link>
@@ -39,4 +39,4 @@ export function PageHeader({
       </div>
     </div>
   );
-};
+}
