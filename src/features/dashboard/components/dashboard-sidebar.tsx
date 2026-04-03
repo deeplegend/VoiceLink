@@ -126,7 +126,7 @@ export function DashboardSidebar() {
     },
     {
       title: "Help and support",
-      url: "mailto:imt_2023007+help@iiitm.ac.in",
+      url: "mailto:help@resonance.com",
       icon: Headphones,
     },
   ];
@@ -138,13 +138,13 @@ export function DashboardSidebar() {
         className="flex items-center gap-2 pl-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:pl-0">
           <Image
             src="/logo.svg"
-            alt="VoiceLink Logo"
+            alt="Resonance"
             width={24}
             height={24}
             className="rounded-sm"
           />
           <span className="group-data-[collapsible=icon]:hidden font-semibold text-lg tracking-tighter text-foreground">
-            VoiceLink
+            Resonance
           </span>
           <SidebarTrigger className="ml-auto lg:hidden" />
         </div>

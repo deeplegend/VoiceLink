@@ -1,5 +1,3 @@
-/* eslint-disable no-var */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { cn } from "@/lib/utils";
 import React, { useEffect, useRef, useState } from "react";
@@ -80,7 +78,7 @@ export const WavyBackground = ({
       ctx.strokeStyle = waveColors[i % waveColors.length];
       for (x = 0; x < w; x += 5) {
         var y = noise(x / 800, 0.3 * i, nt) * 100;
-        ctx.lineTo(x, y + waveYOffset);
+        ctx.lineTo(x, y + waveYOffset); 
       }
       ctx.stroke();
       ctx.closePath();
