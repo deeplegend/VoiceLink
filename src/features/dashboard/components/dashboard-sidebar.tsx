@@ -112,10 +112,6 @@ export function DashboardSidebar() {
       url: "/text-to-speech",
       icon: AudioLines,
     },
-    {
-      title: "Voice cloning",
-      icon: Volume2,
-    },
   ];
 
   const othersMenuItems: MenuItem[] = [
