@@ -12,6 +12,7 @@ import { cn, formatFileSize } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAudioPlayback } from "@/hooks/use-audio-playback";
 import { useAudioRecorder } from "@/features/voices/hooks/use-audio-recorder";
+import { MIN_AUDIO_DURATION_SECONDS } from "@/app/api/voices/constants";
 
 function formatTime(seconds: number) {
     const h = Math.floor(seconds / 3600);
@@ -162,7 +163,7 @@ export function VoiceRecorder({
                     Record your voice
                 </p>
                 <p className="text-center text-sm text-muted-foreground">
-                    Click record to start capturing audio
+                    {`Click record to start capturing audio (min ${MIN_AUDIO_DURATION_SECONDS} seconds)`}
                 </p>
             </div>
             <Button
