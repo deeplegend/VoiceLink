@@ -14,7 +14,7 @@ import {
 import {
   PrismaClient,
   type VoiceCategory,
-} from "../src/generated/prisma/client";
+} from "@prisma/client";
 
 import { CANONICAL_SYSTEM_VOICE_NAMES } from "../src/features/voices/data/voice-scoping";
 
@@ -63,7 +63,7 @@ const systemVoiceMetadata: Record<string, VoiceMetadata> = {
     language: "en-GB",
   },
   Anaya: {
-    description: "Polite and professional, suited for customer service",
+    description: "Polite and professional, suited for teaching and educational content",
     category: "CUSTOMER_SERVICE",
     language: "en-IN",
   },

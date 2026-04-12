@@ -111,7 +111,7 @@ export function DashboardSidebar() {
       title: "Text to speech",
       url: "/text-to-speech",
       icon: AudioLines,
-    },
+    }
   ];
 
   const othersMenuItems: MenuItem[] = [
@@ -122,7 +122,7 @@ export function DashboardSidebar() {
     },
     {
       title: "Help and support",
-      url: "mailto:mailto:imt_2023007+help@iiitm.ac.in",
+      url: "/help-support",
       icon: Headphones,
     },
   ];
