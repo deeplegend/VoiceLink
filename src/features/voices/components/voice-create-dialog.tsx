@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
     Dialog,
     DialogContent,
@@ -34,10 +35,17 @@ export function VoiceCreateDialog({
     onOpenChange,
 }: VoiceCreateDialogProps) {
     const isMobile = useIsMobile();
+    const [internalOpen, setInternalOpen] = useState(false);
+    const isOpen = open !== undefined ? open : internalOpen;
+
+    const handleOpenChange = (newOpen: boolean) => {
+        setInternalOpen(newOpen);
+        onOpenChange?.(newOpen);
+    };
 
     if (isMobile) {
         return (
-            <Drawer open={open} onOpenChange={onOpenChange}>
+            <Drawer open={isOpen} onOpenChange={handleOpenChange}>
                 {children && <DrawerTrigger asChild>{children}</DrawerTrigger>}
                 <DrawerContent>
                     <DrawerHeader>
@@ -47,8 +55,10 @@ export function VoiceCreateDialog({
                             library.
                         </DrawerDescription>
                     </DrawerHeader>
+                    {}
                     <VoiceCreateForm
                         scrollable
+                        onSuccess={() => handleOpenChange(false)}
                         footer={(submit) => (
                             <DrawerFooter>
                                 {submit}
@@ -64,7 +74,7 @@ export function VoiceCreateDialog({
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={isOpen} onOpenChange={handleOpenChange}>
             {children && <DialogTrigger asChild>{children}</DialogTrigger>}
             <DialogContent>
                 <DialogHeader className="text-left">
@@ -73,7 +83,8 @@ export function VoiceCreateDialog({
                         Upload or record an audio sample to add a new voice to your library.
                     </DialogDescription>
                 </DialogHeader>
-                <VoiceCreateForm />
+                {}
+                <VoiceCreateForm onSuccess={() => handleOpenChange(false)} />
             </DialogContent>
         </Dialog>
     );
