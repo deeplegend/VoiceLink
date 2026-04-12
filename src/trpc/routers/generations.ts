@@ -10,7 +10,7 @@ export const generationsRouter = createTRPCRouter({
   getById: orgProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
-      const generation = await prisma.generation.findUnique({
+      const generation = await prisma.generation.findFirst({
         where: { id: input.id, orgId: ctx.orgId },
         omit: {
           orgId: true,

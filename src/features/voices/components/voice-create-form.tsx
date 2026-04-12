@@ -21,6 +21,7 @@ import {
     Globe,
     Layers,
     AlignLeft,
+    Loader2,
 } from "lucide-react";
 import locales from "locale-codes";
 
@@ -251,12 +252,14 @@ interface VoiceCreateFormProps {
     scrollable?: boolean;
     footer?: (submit: React.ReactNode) => React.ReactNode;
     onError?: (message: string) => void;
+    onSuccess?: () => void;
 };
 
 export function VoiceCreateForm({
     scrollable,
     footer,
     onError,
+    onSuccess,
 }: VoiceCreateFormProps) {
     const trpc = useTRPC();
     const queryClient = useQueryClient();
@@ -326,6 +329,7 @@ export function VoiceCreateForm({
                     queryKey: trpc.voices.getAll.queryKey(),
                 });
                 form.reset();
+                if (onSuccess) onSuccess();
             } catch (error) {
                 const message =
                     error instanceof Error ? error.message : "Failed to create voice";
@@ -514,7 +518,14 @@ export function VoiceCreateForm({
                     {({ isSubmitting }) => {
                         const submitButton = (
                             <Button type="submit" disabled={isSubmitting}>
-                                {isSubmitting ? "Creating..." : "Create Voice"}
+                                {isSubmitting ? (
+                                    <>
+                                        <Loader2 className="mr-2 size-4 animate-spin" />
+                                        Creating...
+                                    </>
+                                ) : (
+                                    "Create Voice"
+                                )}
                             </Button>
                         );
 

@@ -4,7 +4,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { uploadAudio } from "@/lib/r2";
 import { VOICE_CATEGORIES } from "@/features/voices/data/voice-categories";
-import type { VoiceCategory } from "@/generated/prisma/client";
+import type { VoiceCategory } from "@prisma/client";
 import { MAX_UPLOAD_SIZE_BYTES, MIN_AUDIO_DURATION_SECONDS } from "../constants";
 
 const createVoiceSchema = z.object({
