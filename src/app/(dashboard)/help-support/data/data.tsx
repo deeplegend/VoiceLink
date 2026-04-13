@@ -42,7 +42,7 @@ export const faqData: FAQCategory[] = [
                         . Once you click the 'Generate' button, the system will process your input and produce an audio output that you can listen to or download.
                     </>
                 ),
-                youtubeId: "YPF-wW3wSos"
+                youtubeId: "Y6lHWYNv7sw"
             },
             {
                 id: "item-10",
@@ -82,7 +82,7 @@ export const faqData: FAQCategory[] = [
                             Text-to-Speech page
                         </Link> tab and click 'Create Voice'. You can record directly from your microphone or upload a clean, high-quality audio file (WAV or MP3) of the voice you want to clone.",
                         </>,
-                youtubeId: "HaiEKBXBg6s"
+                youtubeId: "oCi9ubELoz4"
             },
             {
                 id: "item-4",
