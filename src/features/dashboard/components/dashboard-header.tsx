@@ -26,7 +26,7 @@ export function DashboardHeader() {
           </Link>
         </Button>
         <Button variant="outline" size="sm" asChild>
-          <Link href="mailto:mailto:imt_2023007+help@iiitm.ac.in">
+          <Link href="/help-support">
             <Headphones />
             <span className="hidden lg:block">Need help?</span>
           </Link>
