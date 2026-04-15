@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { uploadAudio } from "@/lib/r2";
 import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
 import { createTRPCRouter, orgProcedure } from "../init";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 export const generationsRouter = createTRPCRouter({
   getById: orgProcedure
@@ -166,6 +167,18 @@ export const generationsRouter = createTRPCRouter({
           message: "Failed to store generated audio",
         });
       }
+
+      getPostHogClient().capture({
+        distinctId: ctx.userId,
+        event: "speech_generated",
+        properties: {
+          generation_id: generationId,
+          voice_id: input.voiceId,
+          voice_name: voice.name,
+          text_length: input.text.length,
+          org_id: ctx.orgId,
+        },
+      });
 
       return {
         id: generationId,

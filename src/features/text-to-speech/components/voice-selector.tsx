@@ -1,6 +1,7 @@
 "use client";
 
 import { useStore } from "@tanstack/react-form";
+import posthog from "posthog-js";
 
 import { VOICE_CATEGORY_LABELS } from "@/features/voices/data/voice-categories";
 
@@ -45,7 +46,15 @@ export function VoiceSelector() {
       <FieldLabel>Voice style</FieldLabel>
       <Select
         value={voiceId}
-        onValueChange={(v) => form.setFieldValue("voiceId", v)}
+        onValueChange={(v) => {
+          const selected = voices.find((voice) => voice.id === v);
+          posthog.capture("voice_selected", {
+            voice_id: v,
+            voice_name: selected?.name,
+            voice_category: selected?.category,
+          });
+          form.setFieldValue("voiceId", v);
+        }}
         disabled={isSubmitting}
       >
         <SelectTrigger className="w-full h-auto gap-1 rounded-lg bg-white px-2 py-1">

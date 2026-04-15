@@ -6,6 +6,7 @@ import { uploadAudio } from "@/lib/r2";
 import { VOICE_CATEGORIES } from "@/features/voices/data/voice-categories";
 import type { VoiceCategory } from "@prisma/client";
 import { MAX_UPLOAD_SIZE_BYTES, MIN_AUDIO_DURATION_SECONDS } from "../constants";
+import { getPostHogClient } from "@/lib/posthog-server";
 
 const createVoiceSchema = z.object({
   name: z.string().min(1, "Voice name is required"),
@@ -145,6 +146,20 @@ export async function POST(request: Request) {
       { status: 500 },
     );
   }
+
+  getPostHogClient().capture({
+    distinctId: userId,
+    event: "voice_created",
+    properties: {
+      voice_id: createdVoiceId,
+      name,
+      category,
+      language,
+      org_id: orgId,
+      audio_duration_seconds: duration,
+      file_size_bytes: fileBuffer.byteLength,
+    },
+  });
 
   return Response.json(
     { name, message: "Voice created successfully" },
