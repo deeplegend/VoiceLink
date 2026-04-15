@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { formOptions } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
+import posthog from "posthog-js";
 
 import { useTRPC } from "@/trpc/client";
 import { useAppForm } from "@/hooks/use-app-form";
@@ -53,6 +54,14 @@ export function TextToSpeechForm({
       onSubmit: ttsFormSchema,
     },
     onSubmit: async ({ value }) => {
+      posthog.capture("speech_generation_submitted", {
+        voice_id: value.voiceId,
+        text_length: value.text.trim().length,
+        temperature: value.temperature,
+        top_p: value.topP,
+        top_k: value.topK,
+        repetition_penalty: value.repetitionPenalty,
+      });
       try {
         const data = await createMutation.mutateAsync({
           text: value.text.trim(),
@@ -63,12 +72,23 @@ export function TextToSpeechForm({
           repetitionPenalty: value.repetitionPenalty,
         });
 
+        posthog.capture("speech_generation_completed", {
+          generation_id: data.id,
+          voice_id: value.voiceId,
+          text_length: value.text.trim().length,
+        });
         toast.success("Audio generated successfully!");
         router.push(`/text-to-speech/${data.id}`);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "Failed to generate audio";
 
+        posthog.capture("speech_generation_failed", {
+          voice_id: value.voiceId,
+          text_length: value.text.trim().length,
+          error_message: message,
+        });
+        posthog.captureException(error);
         toast.error(message);
       }
     },

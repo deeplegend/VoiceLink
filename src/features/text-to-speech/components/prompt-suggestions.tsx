@@ -1,5 +1,7 @@
 "use client";
 
+import posthog from "posthog-js";
+
 import {
     BookOpen,
     Smile,
@@ -84,7 +86,12 @@ export function PromptSuggestions({
                         key={suggestion.label}
                         variant="outline"
                         className="cursor-pointer gap-1.5 py-1 px-2.5 text-xs hover:bg-accent rounded-md"
-                        onClick={() => onSelect(suggestion.prompt)}
+                        onClick={() => {
+                            posthog.capture("prompt_suggestion_selected", {
+                                suggestion_label: suggestion.label,
+                            });
+                            onSelect(suggestion.prompt);
+                        }}
                     >
                         <suggestion.icon className="size-3.5 shrink-0" />
                         {suggestion.label}

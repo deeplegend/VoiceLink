@@ -24,6 +24,7 @@ import {
     Loader2,
 } from "lucide-react";
 import locales from "locale-codes";
+import posthog from "posthog-js";
 
 import { cn, formatFileSize } from "@/lib/utils";
 import { useAudioPlayback } from "@/hooks/use-audio-playback";
@@ -315,6 +316,12 @@ export function VoiceCreateForm({
             onSubmit: voiceCreateFormSchema,
         },
         onSubmit: async ({ value }) => {
+            posthog.capture("voice_creation_submitted", {
+                category: value.category,
+                language: value.language,
+                file_size: value.file?.size,
+                file_type: value.file?.type,
+            });
             try {
                 await createMutation.mutateAsync({
                     name: value.name,
@@ -324,6 +331,10 @@ export function VoiceCreateForm({
                     description: value.description || undefined,
                 });
 
+                posthog.capture("voice_creation_completed", {
+                    category: value.category,
+                    language: value.language,
+                });
                 toast.success("Voice created successfully!");
                 queryClient.invalidateQueries({
                     queryKey: trpc.voices.getAll.queryKey(),
@@ -334,6 +345,12 @@ export function VoiceCreateForm({
                 const message =
                     error instanceof Error ? error.message : "Failed to create voice";
 
+                posthog.capture("voice_creation_failed", {
+                    category: value.category,
+                    language: value.language,
+                    error_message: message,
+                });
+                posthog.captureException(error);
                 if (onError) {
                     onError(message);
                 } else {
