@@ -3,11 +3,17 @@
 import { useUser } from "@clerk/nextjs";
 import { Headphones, ThumbsUp } from "lucide-react";
 import Link from "next/link";
+import { usePostHog } from "posthog-js/react";
 
 import { Button } from "@/components/ui/button";
 
 export function DashboardHeader() {
   const { isLoaded, user } = useUser();
+  const posthog = usePostHog(); 
+
+  const handleFeedbackClick = () => {
+    posthog.capture("top_nav_feedback_clicked");
+  };
 
   return (
     <div className="flex items-start justify-between">
@@ -19,12 +25,11 @@ export function DashboardHeader() {
       </div>
 
       <div className="lg:flex items-center gap-3 hidden">
-        <Button variant="outline" size="sm" asChild>
-          <Link href="mailto:mailto:imt_2023007+feedback@iiitm.ac.in">
-            <ThumbsUp />
-            <span className="hidden lg:block">Feedback</span>
-          </Link>
+        <Button variant="outline" size="sm" onClick={handleFeedbackClick}>
+          <ThumbsUp />
+          <span className="hidden lg:block">Feedback</span>
         </Button>
+        
         <Button variant="outline" size="sm" asChild>
           <Link href="/help-support">
             <Headphones />
