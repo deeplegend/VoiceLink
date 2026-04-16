@@ -2,7 +2,7 @@ import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { chatterbox } from "@/lib/chatterbox-client";
 import { prisma } from "@/lib/db";
-import { uploadAudio } from "@/lib/r2";
+import { uploadAudio, deleteAudio } from "@/lib/r2"; // <-- Added deleteAudio here
 import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
 import { createTRPCRouter, orgProcedure } from "../init";
 import { getPostHogClient } from "@/lib/posthog-server";
@@ -28,7 +28,7 @@ export const generationsRouter = createTRPCRouter({
         audioUrl: `/api/audio/${generation.id}`,
       };
     }),
-  
+
   getAll: orgProcedure.query(async ({ ctx }) => {
     const generations = await prisma.generation.findMany({
       where: { orgId: ctx.orgId },
@@ -51,16 +51,13 @@ export const generationsRouter = createTRPCRouter({
         topP: z.number().min(0).max(1).default(0.95),
         topK: z.number().min(1).max(10000).default(1000),
         repetitionPenalty: z.number().min(1).max(2).default(1.2),
-      })
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       const voice = await prisma.voice.findUnique({
         where: {
           id: input.voiceId,
-          OR: [
-            { variant: "SYSTEM" },
-            { variant: "CUSTOM", orgId: ctx.orgId, }
-          ],
+          OR: [{ variant: "SYSTEM" }, { variant: "CUSTOM", orgId: ctx.orgId }],
         },
         select: {
           id: true,
@@ -183,5 +180,39 @@ export const generationsRouter = createTRPCRouter({
       return {
         id: generationId,
       };
+    }),
+
+  // --- Added delete mutation here ---
+  delete: orgProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      // Use findFirst so we can query securely by both id and orgId
+      const generation = await prisma.generation.findFirst({
+        where: {
+          id: input.id,
+          orgId: ctx.orgId,
+        },
+        select: {
+          id: true,
+          r2ObjectKey: true,
+        },
+      });
+
+      if (!generation) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Generation not found",
+        });
+      }
+
+      // Delete from database
+      await prisma.generation.delete({ where: { id: generation.id } });
+
+      // Delete the file from R2
+      if (generation.r2ObjectKey) {
+        await deleteAudio(generation.r2ObjectKey).catch(() => {});
+      }
+
+      return { success: true };
     }),
 });

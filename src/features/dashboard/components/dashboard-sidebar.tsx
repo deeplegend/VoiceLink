@@ -18,11 +18,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
-import { 
-  OrganizationSwitcher,
-  UserButton,
-  useClerk
-} from "@clerk/nextjs";
+import { OrganizationSwitcher, UserButton, useClerk } from "@clerk/nextjs";
 import {
   type LucideIcon,
   Home,
@@ -39,13 +35,13 @@ interface MenuItem {
   url?: string;
   icon: LucideIcon;
   onClick?: () => void;
-};
+}
 
 interface NavSectionProps {
   label?: string;
   items: MenuItem[];
   pathname: string;
-};
+}
 
 function NavSection({ label, items, pathname }: NavSectionProps) {
   return (
@@ -111,7 +107,7 @@ export function DashboardSidebar() {
       title: "Text to speech",
       url: "/text-to-speech",
       icon: AudioLines,
-    }
+    },
   ];
 
   const othersMenuItems: MenuItem[] = [
@@ -130,18 +126,19 @@ export function DashboardSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="flex flex-col gap-4 pt-4">
-        <div 
-        className="flex items-center gap-2 pl-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:pl-0">
-          <Image
-            src="/logo.svg"
-            alt="VoiceLink logo"
-            width={24}
-            height={24}
-            className="rounded-sm"
-          />
-          <span className="group-data-[collapsible=icon]:hidden font-semibold text-lg tracking-tighter text-foreground">
-            VoiceLink
-          </span>
+        <div className="flex items-center pl-1 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:pl-0">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/logo.svg"
+              alt="VoiceLink logo"
+              width={24}
+              height={24}
+              className="rounded-sm"
+            />
+            <span className="group-data-[collapsible=icon]:hidden font-semibold text-lg tracking-tighter text-foreground">
+              VoiceLink
+            </span>
+          </Link>
           <SidebarTrigger className="ml-auto lg:hidden" />
         </div>
         <SidebarMenu>
@@ -149,19 +146,17 @@ export function DashboardSidebar() {
             <OrganizationSwitcher
               hidePersonal
               fallback={
-                <Skeleton
-                  className="h-8.5 w-full group-data-[collapsible=icon]:size-8 rounded-md border bg-white"
-                />
+                <Skeleton className="h-8.5 w-full group-data-[collapsible=icon]:size-8 rounded-md border bg-white" />
               }
               appearance={{
                 elements: {
-                  rootBox: 
+                  rootBox:
                     "w-full! group-data-[collapsible=icon]:w-auto! group-data-[collapsible=icon]:flex! group-data-[collapsible=icon]:justify-center!",
                   organizationSwitcherTrigger:
                     "w-full! justify-between! bg-white! border! border-border! rounded-md! pl-1! pr-2! py-1! gap-3! group-data-[collapsible=icon]:w-auto! group-data-[collapsible=icon]:p-1! shadow-[0px_1px_1.5px_0px_rgba(44,54,53,0.03)]!",
                   organizationPreview: "gap-2!",
                   organizationPreviewAvatarBox: "size-6! rounded-sm!",
-                  organizationPreviewTextContainer: 
+                  organizationPreviewTextContainer:
                     "text-xs! tracking-tight! font-medium! text-foreground! group-data-[collapsible=icon]:hidden!",
                   organizationPreviewMainIdentifier: "text-[13px]!",
                   organizationSwitcherTriggerIcon:
@@ -197,9 +192,10 @@ export function DashboardSidebar() {
                   userButtonTrigger:
                     "w-full! justify-between! bg-white! border! border-border! rounded-md! pl-1! pr-2! py-1! shadow-[0px_1px_1.5px_0px_rgba(44,54,53,0.03)]! group-data-[collapsible=icon]:w-auto! group-data-[collapsible=icon]:p-1! group-data-[collapsible=icon]:after:hidden! [--border:color-mix(in_srgb,transparent,var(--clerk-color-neutral,#000000)_15%)]!",
                   userButtonBox: "flex-row-reverse! gap-2!",
-                  userButtonOuterIdentifier: "text-[13px]! tracking-tight! font-medium! text-foreground! pl-0! group-data-[collapsible=icon]:hidden!",
+                  userButtonOuterIdentifier:
+                    "text-[13px]! tracking-tight! font-medium! text-foreground! pl-0! group-data-[collapsible=icon]:hidden!",
                   userButtonAvatarBox: "size-6!",
-                }
+                },
               }}
             />
           </SidebarMenuItem>
